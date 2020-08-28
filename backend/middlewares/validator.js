@@ -19,6 +19,18 @@ const userValidationRules = () => {
   ];
 };
 
+const loginValidationRules = () => {
+  return [
+    // check if email is correct
+    check("email", "Please include a valid email").isEmail(),
+    // check  if password is of correct length
+    check(
+      "password",
+      "Please enter password with more than 5 characters"
+    ).isLength({ min: 5 }),
+  ];
+};
+
 const postValidationRules = () => {
   return [
     // check if caption is present
@@ -46,6 +58,7 @@ const validate = (req, res, next) => {
 module.exports = {
   userValidationRules,
   postValidationRules,
+  loginValidationRules,
   commentValidationRules,
   validate,
 };
