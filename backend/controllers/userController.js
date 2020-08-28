@@ -1,4 +1,3 @@
-
 const User = require("../models/User");
 const Post = require("../models/Post");
 
@@ -24,11 +23,19 @@ exports.getUsers = async (req, res) => {
 };
 
 exports.getUser = async (req, res) => {
+  const reqUser = await User.findById(req.user.id);
   const user = await User.findOne({ username: req.params.username })
     .select("-password")
-    .populate({ path: "posts", select: "files commentsCount likesCount" })
-    .populate({ path: "savedPosts", select: "files commentsCount likesCount" })
+    .populate({
+      path: "posts",
+      select: "caption files commentsCount likesCount",
+    })
+    .populate({
+      path: "savedPosts",
+      select: "caption files commentsCount likesCount",
+    })
     .populate({ path: "followers", select: "avatar username fullname" })
+    .populate({ path: "following", select: "avatar username fullname" })
     .lean()
     .exec();
 
@@ -38,12 +45,11 @@ exports.getUser = async (req, res) => {
 
   user.isFollowing = false;
   const followers = user.followers.map((follower) => follower._id.toString());
-
   //   feed this to the followers list
   user.followers.forEach((follower) => {
     follower.isFollowing = false;
     // if currently logged in user is following
-    if (req.user.following.includes(follower._id.toString())) {
+    if (reqUser.following.includes(follower._id.toString())) {
       follower.isFollowing = true;
     }
   });
@@ -51,7 +57,7 @@ exports.getUser = async (req, res) => {
   //   feed this to the following list
   user.following.forEach((user) => {
     user.isFollowing = false;
-    if (req.user.following.includes(user._id.toString())) {
+    if (reqUser.following.includes(user._id.toString())) {
       user.isFollowing = true;
     }
   });
@@ -98,115 +104,120 @@ exports.follow = async (req, res) => {
   res.status(200).json({ success: true, msg: "User followed successfully!" });
 };
 
-exports.unfollow = (req, res) => {
-    const user = await User.findById(req.params.id);
+exports.unfollow = async (req, res) => {
+  const user = await User.findById(req.params.id);
 
-    if(!user) {
-        return res.status(400).json({msg: 'No user found'})
-    }
+  if (!user) {
+    return res.status(400).json({ msg: "No user found" });
+  }
 
-    // make sure the user is not the logged-in user
-    if(req.params.id === req.user.id) {
-        return res.status(400).json({msg: 'You cannot unfollow yourself'});
-    }
+  // make sure the user is not the logged-in user
+  if (req.params.id === req.user.id) {
+    return res.status(400).json({ msg: "You cannot unfollow yourself" });
+  }
 
-    await User.findByIdAndUpdate(req.params.id, {
-        $pull: {followers: req.user.id},
-        $inc: {followersCount: -1}
-    })
+  await User.findByIdAndUpdate(req.params.id, {
+    $pull: { followers: req.user.id },
+    $inc: { followersCount: -1 },
+  });
 
-    await User.findByIdAndUpdate(req.user.id, {
-        $pull: {following: req.params.id},
-        $inc: {followingCount: -1}
-    })
+  await User.findByIdAndUpdate(req.user.id, {
+    $pull: { following: req.params.id },
+    $inc: { followingCount: -1 },
+  });
 
-    res.status(200).json({success: true, msg: 'Successfully unfollowed the user'})
-}
+  res
+    .status(200)
+    .json({ success: true, msg: "Successfully unfollowed the user" });
+};
 
 exports.feed = async (req, res) => {
-    const following = req.user.following;
-    
-    // get the users from  the followers
-    const users = await User.find()
-                .where('_id')
-                .in(following.concat([req.user.id]))
-                .exec();
-    
-    const postIds = users.map(user => user.posts).flat();
+  const reqUser = await User.findById(req.user.id);
+  const following = reqUser.following;
 
-    const posts = await Post.find()
-            .populate({
-                path: 'comments',
-                select: 'text',
-                populate: {path: 'user', select: 'avatar fullname username'}
-            })
-            .populate({path: 'user', select: 'avatar fullname username'})
-            .sort('-createdAt')
-            .where('_id')
-            .in(postIds)
-            .lean()
-            .exec();
-    
-    posts.forEach(post => {
-        // did the logged in user liked the post?
-        post.isLiked = false;
-        const likes = post.likes.map(like => like.toString());
-        if(likes.includes(req.user.id)) {
-            post.isLiked = true;
-        }
+  // get the users from  the followers
+  const users = await User.find()
+    .where("_id")
+    .in(following.concat([req.user.id]))
+    .exec();
 
-        // did the logged in user save this post
-        post.isSaved = false;
-        const savedPosts = req.user.savedPosts.map(post => post.toString());
-        if(savedPosts.includes(post._id)) {
-            post.isSaved = true;
-        }
-        // does this post belong to the logged-in user
-        post.isMine = false;
-        if(post.user._id.toString() === req.user.id) {
-            post.isMine = true;
-        }
+  const postIds = users.map((user) => user.posts).flat();
 
-        // does the comment belong to the logged-in user
-        post.comments.map(comment => {
-            comment.isCommentMine = false;
-            if(comment.user._id.toString() === req.user.id) {
-                comment.isCommentMine = true;
-            }
-        });
-    });
+  const posts = await Post.find()
+    .populate({
+      path: "comments",
+      select: "text",
+      populate: { path: "user", select: "avatar fullname username" },
+    })
+    .populate({ path: "user", select: "avatar fullname username" })
+    .sort("-createdAt")
+    .where("_id")
+    .in(postIds)
+    .lean()
+    .exec();
 
-    res.status(200).json({success: true, data: posts});
-}
-
-exports.searchUser = async (req, res) => {
-    if(!req.query.username) {
-        return res.status(400).json({msg: 'The username cannot be empty'});
+  posts.forEach((post) => {
+    // did the logged in user liked the post?
+    post.isLiked = false;
+    const likes = post.likes.map((like) => like.toString());
+    if (likes.includes(req.user.id)) {
+      post.isLiked = true;
     }
 
-    const regex = new RegExp(req.query.username, "i");
-    const users = await User.find({username: regex});
+    // did the logged in user save this post
+    post.isSaved = false;
+    const savedPosts = req.user.savedPosts.map((post) => post.toString());
+    if (savedPosts.includes(post._id)) {
+      post.isSaved = true;
+    }
+    // does this post belong to the logged-in user
+    post.isMine = false;
+    if (post.user._id.toString() === req.user.id) {
+      post.isMine = true;
+    }
 
-    res.status(200).json({success: true, data: users});
-}
+    // does the comment belong to the logged-in user
+    post.comments.map((comment) => {
+      comment.isCommentMine = false;
+      if (comment.user._id.toString() === req.user.id) {
+        comment.isCommentMine = true;
+      }
+    });
+  });
+
+  res.status(200).json({ success: true, data: posts });
+};
+
+exports.searchUser = async (req, res) => {
+  if (!req.query.username) {
+    return res.status(400).json({ msg: "The username cannot be empty" });
+  }
+
+  const regex = new RegExp(req.query.username, "i");
+  const users = await User.find({ username: regex });
+
+  res.status(200).json({ success: true, data: users });
+};
 
 exports.updateUser = async (req, res) => {
-    const {avatar, username, fullname, bio, website, email} = req.body;
+  const { avatar, username, fullname, bio, website, email } = req.body;
 
-    const updateFields = {};
-    if(avatar) updateFields.avatar = avatar;
-    if(username) updateFields.username = username;
-    if(fullname) updateFields.fullname = fullname;
-    if(email) updateFields.email = email;
+  const updateFields = {};
+  if (avatar) updateFields.avatar = avatar;
+  if (username) updateFields.username = username;
+  if (fullname) updateFields.fullname = fullname;
+  if (email) updateFields.email = email;
 
-    const user = await User.findByIdAndUpdate(req.user.id, 
-        {
-            $set: {...updateFields, website, bio},
-        }, 
-        {
-            new: true,
-            runValidators: true
-        }).select('avatar username fullname email bio website');
-    
-    res.status(200).json({success: true, data: user});
-}
+  const user = await User.findByIdAndUpdate(
+    req.user.id,
+    {
+      $set: { ...updateFields, website, bio },
+    },
+    {
+      new: true,
+      runValidators: true,
+    }
+  ).select("avatar username fullname email bio website");
+
+  res.status(200).json({ success: true, data: user });
+};

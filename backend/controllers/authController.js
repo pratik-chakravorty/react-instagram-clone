@@ -3,37 +3,38 @@ const config = require("config");
 const bcrypt = require("bcryptjs");
 const User = require("../models/User");
 
-exports.registerUsers = async (req, res) => {
+exports.register = async (req, res) => {
   const { fullname, username, email, password } = req.body;
   let user = await User.findOne({ email });
   if (user) {
-    return res.status(400).json({ errors: [{ msg: "User already exists!" }] });
+    res.status(400).json({ errors: [{ msg: "User already exists!" }] });
+  } else {
+    //create user obj
+    user = new User({ fullname, username, email, password });
+    //generate hash
+    const salt = await bcrypt.genSalt(5);
+    user.password = await bcrypt.hash(password, salt);
+    //save user to DB
+    await user.save();
+
+    //sign jwt and send a token response
+    const payload = {
+      user: {
+        id: user._id,
+      },
+    };
+
+    //sign jwt -> change the expiration in 1 hour or more
+    jwt.sign(
+      payload,
+      config.get("jwtSecret"),
+      { expiresIn: 3600 },
+      (err, token) => {
+        if (err) throw err;
+        res.json({ token });
+      }
+    );
   }
-  //create user obj
-  user = new User({ fullname, username, email, password, avatar });
-  //generate hash
-  const salt = await bcrypt.genSalt(10);
-  user.password = await bcrypt.hash(password, salt);
-  //save user to DB
-  await user.save();
-
-  //sign jwt and send a token response
-  const payload = {
-    user: {
-      id: user.id,
-    },
-  };
-
-  //sign jwt -> change the expiration in 1 hour or more
-  jwt.sign(
-    payload,
-    config.get("jwtSecret"),
-    { expiresIn: 360000 },
-    (err, token) => {
-      if (err) throw err;
-      res.json({ success: true, token });
-    }
-  );
 };
 
 exports.login = async (req, res) => {

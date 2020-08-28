@@ -1,12 +1,12 @@
 const express = require("express");
 const router = express.Router();
-const { catchErrors } = require("../handlers/errorHandlers");
+const { catchErrors } = require("../middlewares/errorHandler");
 const {
   userValidationRules,
   loginValidationRules,
   postValidationRules,
   validate,
-} = require("../middleware/validator");
+} = require("../middlewares/validator");
 
 const auth = require("../middlewares/auth");
 const {
@@ -32,7 +32,7 @@ const {
 } = require("../controllers/postController");
 
 const {
-  registerUsers,
+  register,
   login,
   currentUser,
 } = require("../controllers/authController");
@@ -40,15 +40,15 @@ const {
 // Auth Routes
 
 // Sign up a new User
-router.post(
-  "/auth/register",
-  userValidationRules,
-  validate,
-  catchErrors(registerUsers)
-);
+router.post("/auth/register", userValidationRules(), validate, register);
 
 // Login a new User
-router.post("/auth/login", loginValidationRules, validate, catchErrors(login));
+router.post(
+  "/auth/login",
+  loginValidationRules(),
+  validate,
+  catchErrors(login)
+);
 
 // Get Current User
 router.get("/auth/me", catchErrors(auth), catchErrors(currentUser));
@@ -96,18 +96,22 @@ router.get("/posts/toggleSave/:id", catchErrors(auth), catchErrors(toggleSave));
 // Add Post
 router.post(
   "/posts/addPost",
-  postValidationRules,
+  postValidationRules(),
   validate,
   catchErrors(auth),
   catchErrors(addPost)
 );
 
 // Add Comment
-router.post("/posts/addComent/:id", catchErrors(auth), catchErrors(addComment));
+router.post(
+  "/posts/addComment/:id",
+  catchErrors(auth),
+  catchErrors(addComment)
+);
 
 // Delete a Comment
 router.delete(
-  "/posts/deleteComment/:id",
+  "/posts/deleteComment/:id/:commentId",
   catchErrors(auth),
   catchErrors(deleteComment)
 );

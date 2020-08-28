@@ -9,8 +9,8 @@ const app = express();
 // connect to DB
 connectDB();
 
-app.use(express.json());
-app.use(cors());
+app.use(express.json({ extended: false }));
+// app.use(cors());
 
 // routes
 app.use("/api", routes);

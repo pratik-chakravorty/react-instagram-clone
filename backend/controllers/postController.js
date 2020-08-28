@@ -3,17 +3,21 @@ const User = require("../models/User");
 const Comment = require("../models/Comment");
 
 exports.getPosts = async (req, res) => {
-  const posts = await Post.find();
+  const posts = await Post.find().populate({
+    path: "user",
+    select: "username fullname avatar",
+  });
 
   res.status(200).json({ succcess: true, data: posts });
 };
 
 exports.getPost = async (req, res) => {
+  const reqUser = await User.findById(req.user.id);
   const post = await Post.findById(req.params.id)
     .populate({
       path: "comments",
       select: "text",
-      popuate: {
+      populate: {
         path: "user",
         select: "username avatar",
       },
@@ -30,14 +34,14 @@ exports.getPost = async (req, res) => {
   }
 
   //   is this post belonging to logged-in user?
-  post.isMine = req.user.id === post._id.toString();
+  post.isMine = req.user.id === post.user._id.toString();
 
   //   logged-in user liked the post
   const likes = post.likes.map((like) => like.toString());
   post.isLiked = likes.includes(req.user.id);
 
   //   logged-in user liked the saved post
-  const savedPosts = req.user.savedPosts.map((post) => post.toString());
+  const savedPosts = reqUser.savedPosts.map((post) => post.toString());
   post.isSaved = savedPosts.includes(req.params.id);
 
   //   does the comment belong to logged-in user
@@ -80,7 +84,7 @@ exports.addPost = async (req, res) => {
   const { caption, files, tags } = req.body;
   const user = req.user.id;
 
-  let post = await Post.create({ caption, files, tags });
+  let post = await Post.create({ caption, files, tags, user });
 
   await User.findByIdAndUpdate(req.user.id, {
     $push: { posts: post._id },
@@ -88,7 +92,7 @@ exports.addPost = async (req, res) => {
   });
 
   post = await post
-    .populate({ path: "use", select: "avatar username fullname" })
+    .populate({ path: "user", select: "avatar username fullname" })
     .execPopulate();
 
   res.status(200).json({ success: true, data: post });
@@ -112,7 +116,7 @@ exports.toggleLike = async (req, res) => {
     await post.save();
   }
 
-  res.status(200).json({ success: true, msg: "Post liked successfully" });
+  res.status(200).json({ success: true, msg: "Liked Toggled Successfully" });
 };
 
 exports.addComment = async (req, res) => {
@@ -132,7 +136,7 @@ exports.addComment = async (req, res) => {
   post.commentsCount = post.commentsCount + 1;
   await post.save();
 
-  comment = await comment.populate({
+  comment = await Comment.findById(comment._id).populate({
     path: "user",
     select: "avatar username fullname",
   });
