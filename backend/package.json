@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node server",
     "server": "nodemon server --ignore './frontend/'",
-    "dev": "concurrently \"npm run server\" \"npm run frontend\"",
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
     "client": "npm start --prefix frontend"
   },
   "keywords": [],

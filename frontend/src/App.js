@@ -1,14 +1,19 @@
 import React from "react";
-import { ThemeProvider } from "styled-components";
-import GlobalStyle from "./styles/GlobalStyle";
-import { theme } from "./styles/theme";
+import styled from "styled-components";
+import EditProfile from "./components/EditProfile";
+import Container from "./styles/Container";
+
+const AppWrapper = styled.div`
+  display: flex;
+`;
 
 function App() {
   return (
-    <ThemeProvider theme={theme}>
-      <GlobalStyle />
-      <h2>Hello React</h2>
-    </ThemeProvider>
+    <AppWrapper>
+      <Container>
+        <EditProfile />
+      </Container>
+    </AppWrapper>
   );
 }
 
