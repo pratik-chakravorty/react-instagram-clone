@@ -1,5 +1,5 @@
 import React from "react";
-import avatar from "../static/default_avatar.jpg";
+import avatar from "../../static/default_avatar.jpg";
 import styled from "styled-components";
 
 const SuggestionWrapper = styled.div`

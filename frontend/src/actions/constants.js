@@ -6,11 +6,6 @@ export const FETCH_POSTS_SUCCESS = "post/FETCH_POSTS_SUCCESS";
 export const ADD_POST = "post/ADD_POST";
 export const ADD_POST_SUCCESS = "post/ADD_POST_SUCCESS";
 export const DELETE_POST = "post/DELETE_POST";
-export const UPDATE_POST = "post/UPDATE_POST";
-export const UPDATE_POST_SUCCESS = "post/UPDATE_POST_SUCCESS";
-export const GET_CURRENT_USER_POSTS = "post/GET_CURRENT_USER_POSTS";
-export const GET_CURRENT_USER_POSTS_SUCCESS =
-  "post/GET_CURRENT_USER_POSTS_SUCCESS";
 export const TOGGLE_LIKE = "post/TOGGLE_LIKE";
 export const TOGGLE_LIKE_SUCCESS = "post/TOGGLE_LIKE_SUCCESS";
 export const TOGGLE_SAVE = "post/TOGGLE_SAVE";
@@ -37,6 +32,8 @@ export const REGISTER_SUCCESS = "auth/REGISTER_SUCCESS";
 export const LOGIN = "auth/LOGIN";
 export const LOGIN_SUCCESS = "auth/LOGIN_SUCCESS";
 
+export const REGISTER_FAIL = "auth/REGISTER_FAIL";
+export const LOGIN_FAIL = "auth/LOGIN_FAIL";
 export const LOGOUT = "auth/LOGOUT";
 
 export const AUTH_ERROR = "auth/AUTH_ERROR";

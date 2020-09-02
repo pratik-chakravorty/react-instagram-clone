@@ -1,5 +1,5 @@
 import {
-  REGISTER_USER,
+  REGISTER,
   REGISTER_SUCCESS,
   USER_LOADED,
   USER_LOADED_SUCCESS,
@@ -26,7 +26,7 @@ export const loadUserSuccess = (payload) => ({
 
 // register user
 export const register = ({ fullname, username, email, password }) => ({
-  type: REGISTER_USER,
+  type: REGISTER,
   body: { fullname, username, email, password },
 });
 
@@ -47,6 +47,6 @@ export const loginSuccess = (payload) => ({
 });
 
 // logout
-export const LOGOUT = () => ({
+export const logout = () => ({
   type: LOGOUT,
 });

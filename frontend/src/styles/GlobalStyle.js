@@ -28,7 +28,7 @@ const GlobalStyle = createGlobalStyle`
     a {
         text-decoration: none;
         cursor: pointer;
-        color: inherit;
+        color: #0095F6;
     }
 
     button, svg {

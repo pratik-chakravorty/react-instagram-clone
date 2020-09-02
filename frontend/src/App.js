@@ -1,19 +1,16 @@
 import React from "react";
-import styled from "styled-components";
-import EditProfile from "./components/EditProfile";
-import Container from "./styles/Container";
+import { useSelector } from "react-redux";
+import UserRoutes from "./components/routing/UserRoutes";
+import GuestRoutes from "./components/routing/GuestRoutes";
 
-const AppWrapper = styled.div`
-  display: flex;
-`;
-
+// setup routes here
 function App() {
+  const { isAuthenticated } = useSelector((state) => state.auth);
   return (
-    <AppWrapper>
-      <Container>
-        <EditProfile />
-      </Container>
-    </AppWrapper>
+    <React.Fragment>
+      <GuestRoutes />
+      {isAuthenticated ? <UserRoutes /> : null}
+    </React.Fragment>
   );
 }
 

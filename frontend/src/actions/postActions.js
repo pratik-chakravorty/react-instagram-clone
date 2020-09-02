@@ -5,8 +5,6 @@ import {
   FETCH_POSTS_SUCCESS,
   ADD_POST,
   ADD_POST_SUCCESS,
-  GET_CURRENT_USER_POSTS,
-  GET_CURRENT_USER_POSTS_SUCCESS,
   ADD_COMMENT,
   ADD_COMMENT_SUCCESS,
 } from "./constants";
@@ -48,16 +46,6 @@ export const deletePost = (id) => ({
 export const deletePostSuccess = (id) => ({
   type: DELETE_POST_SUCCESS,
   id,
-});
-
-export const getCurrentUserPosts = (id) => ({
-  type: GET_CURRENT_USER_POSTS,
-  id,
-});
-
-export const getCurrentUserPostsSuccess = (payload) => ({
-  type: GET_CURRENT_USER_POSTS_SUCCESS,
-  payload,
 });
 
 export const addComment = (body) => ({

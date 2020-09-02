@@ -1,28 +1,28 @@
 import { createStore, applyMiddleware } from "redux";
-import { composeWithDevtools } from "redux-devtools-extension";
+import { composeWithDevTools } from "redux-devtools-extension";
 import createSagaMiddleware from "redux-saga";
-import rootSaga from "./sagas";
-import rootReducer from "./reducers";
+import rootSaga from "../sagas";
+import rootReducer from "../reducers";
 import {
   setLocalStorageMiddleware,
+  retrieveLocalStorageTokenMiddleware,
   removeLocalStorageMiddleware,
   removeAlertMiddleware,
-  setLocalStorageTokenMiddleware,
-  retrieveLocalStorageTokenMiddleware,
-} from "./middlewares";
+} from "../middlewares";
 
 const sagaMiddleware = createSagaMiddleware();
 
 const middlewares = [
-  sagaMiddleware,
   setLocalStorageMiddleware,
   removeLocalStorageMiddleware,
+  retrieveLocalStorageTokenMiddleware,
   removeAlertMiddleware,
+  sagaMiddleware,
 ];
 
 const store = createStore(
   rootReducer,
-  composeWithDevtools(applyMiddleware(...middlewares))
+  composeWithDevTools(applyMiddleware(...middlewares))
 );
 
 sagaMiddleware.run(rootSaga);

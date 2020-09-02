@@ -1,6 +1,6 @@
 import React from "react";
-import detailed from "../static/detailed_post.jpg";
-import avatar from "../static/default_avatar.jpg";
+import detailed from "../../static/detailed_post.jpg";
+import avatar from "../../static/default_avatar.jpg";
 import { CommentIcon, HeartIcon, InboxIcon, BookmarkIcon } from "./Icons";
 import styled from "styled-components";
 

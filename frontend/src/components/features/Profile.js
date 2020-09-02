@@ -1,8 +1,8 @@
 import React from "react";
 import styled from "styled-components";
 import { PostIcon, SavedIcon, HeartIcon } from "./Icons";
-import avatar from "../static/default_avatar.jpg";
-import post from "../static/detailed_post.jpg";
+import avatar from "../../static/default_avatar.jpg";
+import post from "../../static/detailed_post.jpg";
 
 const ProfileWrapper = styled.div`
   .profile-header {

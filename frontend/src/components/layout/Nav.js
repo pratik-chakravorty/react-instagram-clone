@@ -1,9 +1,14 @@
 import React from "react";
 import styled from "styled-components";
-import Container from "../styles/Container";
-import Search from "./Search";
-import { HomeIcon, ExploreIcon, HeartIcon, NewPostIcon } from "./Icons";
-import navLogo from "../static/navlogo.png";
+import Container from "../../styles/Container";
+import Search from "../features/Search";
+import {
+  HomeIcon,
+  ExploreIcon,
+  HeartIcon,
+  NewPostIcon,
+} from "../features/Icons";
+import navLogo from "../../static/navlogo.png";
 
 const NavWrapper = styled.div`
   width: 100%;

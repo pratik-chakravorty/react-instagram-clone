@@ -1,4 +1,4 @@
-import { removeAlert } from "../actions/alertAction";
+import { removeAlert } from "../actions/alertActions";
 import {
   REGISTER_SUCCESS,
   LOGIN_SUCCESS,
@@ -7,7 +7,6 @@ import {
   ADD_POST,
   FETCH_POSTS,
   FETCH_POST,
-  UPDATE_POST,
   DELETE_POST,
   SET_ALERT,
 } from "../actions/constants";
@@ -21,7 +20,6 @@ export const retrieveLocalStorageTokenMiddleware = (_) => (next) => (
     ADD_POST,
     FETCH_POST,
     FETCH_POSTS,
-    UPDATE_POST,
     DELETE_POST,
   ];
   if (localStorage.token && tokenNeededActions.includes(action.type)) {
