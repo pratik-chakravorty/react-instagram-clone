@@ -1,18 +1,16 @@
 import React from "react";
-import { BrowserRouter as Router, Switch } from "react-router-dom";
+import { Switch } from "react-router-dom";
 import PrivateRoute from "./PrivateRoute";
 import Feed from "../pages/Feed";
-import Nav from "../layout/Nav";
+import Upload from "../pages/Upload";
 
-function HomeRoutes() {
+function UserRoutes() {
   return (
-    <Router>
-      <Switch>
-        <Nav />
-        <PrivateRoute exact path="/feed" component={Feed} />
-      </Switch>
-    </Router>
+    <Switch>
+      <PrivateRoute path="/feed" component={Feed} />
+      <PrivateRoute path="/new" component={Upload} />
+    </Switch>
   );
 }
 
-export default HomeRoutes;
+export default UserRoutes;

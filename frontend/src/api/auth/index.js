@@ -21,4 +21,4 @@ export const loginApi = (body) => {
 };
 
 // get current user
-export const loadUserApi = () => axios.get("/apu/auth/me");
+export const loadUserApi = () => axios.get("/api/auth/me");

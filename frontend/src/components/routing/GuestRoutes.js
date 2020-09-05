@@ -5,12 +5,10 @@ import SignUp from "../pages/SignUp";
 
 function HomeRoutes() {
   return (
-    <Router>
-      <Switch>
-        <Route exact path="/" component={Login} />
-        <Route exact path="/signup" component={SignUp} />
-      </Switch>
-    </Router>
+    <Switch>
+      <Route exact path="/" component={Login} />
+      <Route exact path="/signup" component={SignUp} />
+    </Switch>
   );
 }
 

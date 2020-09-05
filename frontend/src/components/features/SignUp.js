@@ -1,9 +1,12 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 import styled from "styled-components";
+import { useDispatch, useSelector } from "react-redux";
+import { register as registerAction } from "../../actions/authActions";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers";
 import * as yup from "yup";
+import ShowAlert from "./ShowAlert";
 import { Input, SubmitButton, Error } from "../../styles/CommonStyles";
 import logo from "../../static/logo.png";
 
@@ -61,15 +64,31 @@ const schema = yup.object().shape({
 });
 
 function SignUp() {
+  const dispatch = useDispatch();
+  const alerts = useSelector((state) => state.alerts);
+  const { isAuthenticated } = useSelector((state) => state.auth);
   const { register, handleSubmit, errors, formState } = useForm({
     resolver: yupResolver(schema),
     mode: "onChange",
   });
   const onSubmit = (formData) => {
-    console.log(formData);
+    dispatch(registerAction(formData));
   };
+  if (isAuthenticated) {
+    return <Redirect to="/feed" />;
+  }
   return (
     <React.Fragment>
+      {alerts &&
+        alerts.length > 0 &&
+        alerts.map((alert) => (
+          <ShowAlert
+            key={alert.id}
+            msg={alert.msg}
+            alertType={alert.alertType}
+            id={alert.id}
+          />
+        ))}
       <SignUpWrapper>
         <img className="logo" src={logo} alt="insta-logo" />
         <h2>Sign up to see photos from your friends.</h2>

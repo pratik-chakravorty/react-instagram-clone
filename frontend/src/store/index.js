@@ -13,11 +13,11 @@ import {
 const sagaMiddleware = createSagaMiddleware();
 
 const middlewares = [
+  sagaMiddleware,
   setLocalStorageMiddleware,
   removeLocalStorageMiddleware,
   retrieveLocalStorageTokenMiddleware,
   removeAlertMiddleware,
-  sagaMiddleware,
 ];
 
 const store = createStore(

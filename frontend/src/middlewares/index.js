@@ -43,7 +43,7 @@ export const removeLocalStorageMiddleware = (_) => (next) => (action) => {
 };
 
 export const removeAlertMiddleware = (store) => (next) => (action) => {
-  if (action.type === SET_ALERT) {
+  if (action.type === SET_ALERT && !action.payload.mode) {
     // Set timer for 2 seconds and then remove the alert.
     setTimeout(() => {
       store.dispatch(removeAlert(action.payload.id));

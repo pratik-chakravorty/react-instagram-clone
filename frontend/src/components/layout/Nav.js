@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import { Link } from "react-router-dom";
 import Container from "../../styles/Container";
 import Search from "../features/Search";
 import {
@@ -14,12 +15,15 @@ const NavWrapper = styled.div`
   width: 100%;
   height: 54px;
   position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 999;
   background: ${(props) => props.theme.white};
   border-bottom: 1px solid ${(props) => props.theme.borderColor};
 
   nav {
     display: flex;
-    margin-top: 10px;
+    padding-top: 10px;
     justify-content: space-between;
     align-items: center;
   }
@@ -56,9 +60,9 @@ function Nav() {
               </a>
             </li>
             <li>
-              <a>
+              <Link to="/new">
                 <NewPostIcon />
-              </a>
+              </Link>
             </li>
             <li>
               <a>

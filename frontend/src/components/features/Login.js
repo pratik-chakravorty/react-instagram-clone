@@ -2,8 +2,11 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers";
 import * as yup from "yup";
-import { Link } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 import styled from "styled-components";
+import { useDispatch, useSelector } from "react-redux";
+import ShowAlert from "./ShowAlert";
+import { login as loginAction } from "../../actions/authActions";
 import { Input, SubmitButton, Error } from "../../styles/CommonStyles";
 import logo from "../../static/logo.png";
 
@@ -48,16 +51,32 @@ const schema = yup.object().shape({
 });
 
 function Login() {
+  const dispatch = useDispatch();
+  const alerts = useSelector((state) => state.alerts);
+  const { isAuthenticated } = useSelector((state) => state.auth);
   const { register, handleSubmit, errors, formState } = useForm({
     resolver: yupResolver(schema),
     mode: "onChange",
   });
 
   const onSubmit = (formData) => {
-    console.log(formData);
+    dispatch(loginAction(formData));
   };
+  if (isAuthenticated) {
+    return <Redirect to="/feed" />;
+  }
   return (
     <React.Fragment>
+      {alerts &&
+        alerts.length > 0 &&
+        alerts.map((alert) => (
+          <ShowAlert
+            key={alert.id}
+            msg={alert.msg}
+            alertType={alert.alertType}
+            id={alert.id}
+          />
+        ))}
       <LoginWrapper>
         <img className="logo" src={logo} alt="insta-logo" />
         <form onSubmit={handleSubmit(onSubmit)}>
