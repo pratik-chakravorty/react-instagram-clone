@@ -178,7 +178,7 @@ exports.deleteComment = async (req, res) => {
 };
 
 exports.searchPost = async (req, res) => {
-  if (!req.query.caption && !req.quer.tag) {
+  if (!req.query.caption && !req.query.tag) {
     return res
       .status(404)
       .json({ msg: "Please enter either caption or tag for search." });
@@ -195,7 +195,7 @@ exports.searchPost = async (req, res) => {
     posts = posts.concat([await Post.find({ tags: req.query.tags })]);
   }
 
-  res.status(200).json({ success: true, data: post });
+  res.status(200).json({ success: true, data: posts });
 };
 
 exports.toggleSave = async (req, res) => {

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers";
@@ -37,6 +37,8 @@ const UploadFormWrapper = styled.div`
 `;
 
 function UploadForm() {
+  const [formEnable, setFormEnable] = useState(false);
+  const [imageUrl, setImageUrl] = useState("");
   const SUPPORTED_FORMATS = [
     "image/jpg",
     "image/jpeg",
@@ -56,10 +58,12 @@ function UploadForm() {
       }
     );
     const file = await res.json();
-    console.log(file);
+    setImageUrl(file.secure_url);
+    setFormEnable((preValue) => !preValue);
   };
 
-  const onSubmit = (formData) => {
+  const onSubmit = (values) => {
+    let formData = { ...values, files: [imageUrl] };
     console.log(formData);
   };
   const schema = yup.object().shape({
@@ -103,7 +107,7 @@ function UploadForm() {
           />
           {errors.files && <Error>{errors.files.message}</Error>}
           <SubmitButton
-            disabled={!formState.isValid}
+            disabled={!formEnable && !formState.isValid}
             type="submit"
             value="Upload"
           />

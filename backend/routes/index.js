@@ -79,23 +79,23 @@ router.put("/users/update", catchErrors(auth), catchErrors(updateUser));
 // Post Routes
 
 // Get Posts
-router.get("/posts/getPosts", catchErrors(auth), catchErrors(getPosts));
+router.get("/posts/", catchErrors(auth), catchErrors(getPosts));
 
 // Get Single Post
-router.get("/posts/getPost/:id", catchErrors(auth), catchErrors(getPost));
+router.get("/post/:id", catchErrors(auth), catchErrors(getPost));
 
 // Delete a Post
-router.delete("/posts/delete/:id", catchErrors(auth), catchErrors(deletePost));
+router.delete("/posts/:id", catchErrors(auth), catchErrors(deletePost));
 
 // Toggle Like
-router.get("/posts/toggleLike/:id", catchErrors(auth), catchErrors(toggleLike));
+router.get("/posts/likes/:id", catchErrors(auth), catchErrors(toggleLike));
 
 // Toggle Save
-router.get("/posts/toggleSave/:id", catchErrors(auth), catchErrors(toggleSave));
+router.get("/posts/saves/:id", catchErrors(auth), catchErrors(toggleSave));
 
 // Add Post
 router.post(
-  "/posts/addPost",
+  "/posts",
   postValidationRules(),
   validate,
   catchErrors(auth),
@@ -103,15 +103,11 @@ router.post(
 );
 
 // Add Comment
-router.post(
-  "/posts/addComment/:id",
-  catchErrors(auth),
-  catchErrors(addComment)
-);
+router.post("/posts/comment/:id", catchErrors(auth), catchErrors(addComment));
 
 // Delete a Comment
 router.delete(
-  "/posts/deleteComment/:id/:commentId",
+  "/posts/comment/:id/:commentId",
   catchErrors(auth),
   catchErrors(deleteComment)
 );
