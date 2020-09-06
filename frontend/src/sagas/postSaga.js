@@ -9,7 +9,8 @@ import {
   ADD_POST_SUCCESS,
   ADD_COMMENT,
   ADD_COMMENT_SUCCESS,
-} from "./constants";
+  DELETE_POST,
+} from "../actions/constants";
 
 import {
   addPostSuccess,
@@ -31,6 +32,7 @@ import {
   deleteCommentApi,
   searchPostApi,
 } from "../api/post";
+import { setAlert } from "../actions/alertActions";
 
 function* fetchPostSaga(action) {
   try {
@@ -75,7 +77,7 @@ function* deletePostSaga(action) {
   try {
     yield call(deletePostApi, action.body);
   } catch (e) {
-    const errors = err.response.data.errors;
+    const errors = e.response.data.errors;
     if (errors) {
       yield all(
         errors.map((error) => put(setAlert(error.msg, "error", { id: v4() })))

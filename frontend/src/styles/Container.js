@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 const Container = styled.div`
-  max-width: 960px;
+  max-width: ${(props) => (props.width ? props.width : "960px")};
   margin: 0 auto;
 `;
 

@@ -1,9 +1,11 @@
 import React, { useState } from "react";
-import axios from "axios";
+import { useHistory } from "react-router-dom";
 import { useForm } from "react-hook-form";
+import { useDispatch } from "react-redux";
 import { yupResolver } from "@hookform/resolvers";
 import * as yup from "yup";
 import { Error, Input, SubmitButton } from "../../styles/CommonStyles";
+import { addPost as addPostAction } from "../../actions/postActions";
 import styled from "styled-components";
 
 const UploadFormWrapper = styled.div`
@@ -37,7 +39,9 @@ const UploadFormWrapper = styled.div`
 `;
 
 function UploadForm() {
-  const [formEnable, setFormEnable] = useState(false);
+  const dispatch = useDispatch();
+  const history = useHistory();
+  const [formEnable, setFormEnable] = useState(true);
   const [imageUrl, setImageUrl] = useState("");
   const SUPPORTED_FORMATS = [
     "image/jpg",
@@ -58,13 +62,18 @@ function UploadForm() {
       }
     );
     const file = await res.json();
-    setImageUrl(file.secure_url);
-    setFormEnable((preValue) => !preValue);
+    console.log("file", file);
+    if (file.secure_url) {
+      setImageUrl(file.secure_url);
+      setFormEnable((preValue) => !preValue);
+    }
   };
 
   const onSubmit = (values) => {
-    let formData = { ...values, files: [imageUrl] };
+    let formData = { ...values, files: imageUrl };
     console.log(formData);
+    dispatch(addPostAction(formData));
+    history.push("/feed");
   };
   const schema = yup.object().shape({
     caption: yup.string().required(),
@@ -82,7 +91,6 @@ function UploadForm() {
     resolver: yupResolver(schema),
     mode: "onChange",
   });
-  console.log(errors);
   return (
     <React.Fragment>
       <UploadFormWrapper>
@@ -106,11 +114,7 @@ function UploadForm() {
             onChange={uploadImage}
           />
           {errors.files && <Error>{errors.files.message}</Error>}
-          <SubmitButton
-            disabled={!formEnable && !formState.isValid}
-            type="submit"
-            value="Upload"
-          />
+          <SubmitButton disabled={formEnable} type="submit" value="Upload" />
         </form>
       </UploadFormWrapper>
     </React.Fragment>

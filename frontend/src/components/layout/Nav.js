@@ -55,9 +55,9 @@ function Nav() {
           <Search />
           <ul>
             <li>
-              <a>
+              <Link to="/feed">
                 <HomeIcon />
-              </a>
+              </Link>
             </li>
             <li>
               <Link to="/new">

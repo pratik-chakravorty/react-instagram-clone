@@ -7,6 +7,7 @@ import {
   ADD_POST_SUCCESS,
   ADD_COMMENT,
   ADD_COMMENT_SUCCESS,
+  DELETE_POST,
 } from "./constants";
 
 export const addPost = (body) => ({
@@ -24,7 +25,7 @@ export const fetchPosts = () => ({
 });
 
 export const fetchPostsSuccess = (payload) => ({
-  type: FETCH_POST_SUCCESS,
+  type: FETCH_POSTS_SUCCESS,
   payload,
 });
 
@@ -34,17 +35,12 @@ export const fetchPost = (id) => ({
 });
 
 export const fetchPostSuccess = (payload) => ({
-  type: FETCH_POSTS_SUCCESS,
-  paylaod,
+  type: FETCH_POST_SUCCESS,
+  payload,
 });
 
 export const deletePost = (id) => ({
   type: DELETE_POST,
-  id,
-});
-
-export const deletePostSuccess = (id) => ({
-  type: DELETE_POST_SUCCESS,
   id,
 });
 

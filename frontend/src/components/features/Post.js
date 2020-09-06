@@ -12,6 +12,10 @@ const PostWrapper = styled.div`
   border: 1px solid ${(props) => props.theme.borderColor};
   margin: 6rem auto;
 
+  img {
+    width: 100%;
+  }
+
   h3 {
     font-size: 14px;
     font-weight: 500;
@@ -75,14 +79,17 @@ const PostWrapper = styled.div`
     align-items: center;
   }
 `;
-function Post() {
+function Post(props) {
+  console.log(props);
   return (
     <PostWrapper>
       <div className="post-heading">
-        <img src={avatar} alt="avatar" />
-        <h3>Post Example</h3>
+        <img src={props.post?.user?.avatar} alt="avatar" />
+        <h3>{props.post?.user?.username}</h3>
       </div>
-      <img src={detailed} alt="detailed-image" />
+      {props.post?.files[0] && (
+        <img src={props.post?.files[0]} alt="detailed-image" />
+      )}
       <div className="post-actions">
         <ul>
           <li>
@@ -106,8 +113,8 @@ function Post() {
         </p>
       </div>
       <div className="post-content">
-        <h3>Post Example</h3>
-        <p>Caption Content goes here....and I hope its good.</p>
+        <h3>{props.post?.user?.username}</h3>
+        <p>{props.post?.caption}</p>
       </div>
       <div className="post-comment">
         <h3>user123</h3>

@@ -5,7 +5,7 @@ import {
   FETCH_POSTS_SUCCESS,
   ADD_POST_SUCCESS,
   ADD_COMMENT_SUCCESS,
-} from "./constants";
+} from "../actions/constants";
 
 const initialState = {
   post: {},
@@ -36,21 +36,9 @@ export default function postReducer(state = initialState, action) {
       return {
         ...state,
         loading: false,
-        posts: action.payload,
+        posts: action.payload.data,
       };
-    case ADD_POST_SUCCESS:
-      return {
-        ...state,
-        posts: [...state.posts, action.payload],
-      };
-    case ADD_COMMENT_SUCCESS:
-      return {
-        ...state,
-        posts: state.posts.map((post) =>
-          post.id === action.payload.id
-            ? { ...post, comments: action.payload.comments }
-            : post
-        ),
-      };
+    default:
+      return state;
   }
 }
