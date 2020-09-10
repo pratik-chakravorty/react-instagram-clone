@@ -36,7 +36,7 @@ const SignUpLink = styled.div`
   margin: 0.5rem auto;
   p {
     color: ${(props) => props.theme.paragraphColor};
-    font-weight: 100;
+    font-weight: 500;
   }
   span {
     color: ${(props) => props.theme.blue};

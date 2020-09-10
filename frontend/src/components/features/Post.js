@@ -1,6 +1,11 @@
 import React from "react";
+import Popup from "reactjs-popup";
+import "reactjs-popup/dist/index.css";
 import detailed from "../../static/detailed_post.jpg";
 import avatar from "../../static/default_avatar.jpg";
+import CommentForm from "./CommentForm";
+import CommentList from "./CommentList";
+import PostDetail from "./PostDetail";
 import { CommentIcon, HeartIcon, InboxIcon, BookmarkIcon } from "./Icons";
 import styled from "styled-components";
 
@@ -24,13 +29,8 @@ const PostWrapper = styled.div`
   p,
   .para-muted {
     font-size: 14px;
+    cursor: pointer;
     margin-left: 15px;
-  }
-
-  input {
-    border: none;
-    width: 100%;
-    height: 100%;
   }
 
   .post-heading {
@@ -71,16 +71,14 @@ const PostWrapper = styled.div`
     }
   }
 
-  .post-content,
-  .post-comment,
-  .comment-input {
+  .post-content {
     padding: 0 1rem;
     display: flex;
     align-items: center;
   }
 `;
 function Post(props) {
-  console.log(props);
+  const contentStyle = { padding: "0", border: "0", width: "60%" };
   return (
     <PostWrapper>
       <div className="post-heading">
@@ -116,19 +114,23 @@ function Post(props) {
         <h3>{props.post?.user?.username}</h3>
         <p>{props.post?.caption}</p>
       </div>
-      <div className="post-comment">
-        <h3>user123</h3>
-        <p>Some awesome comment here</p>
-      </div>
-      <div className="post-comment">
-        <h3>someguy123</h3>
-        <p>Some posting here</p>
-      </div>
-      <p class="para-muted">View all 455 comments</p>
-      <div className="comment-input">
-        <br />
-        <input type="text" placeholder="Add Comment" />
-      </div>
+      <CommentList comments={props.post.comments} />
+      {props.post.commentsCount > 5 && (
+        <Popup
+          modal={true}
+          lockScroll
+          trigger={
+            <p class="para-muted">
+              View all {props.post.commentsCount} comments
+            </p>
+          }
+          {...{ contentStyle }}
+          position="center center"
+        >
+          <PostDetail post={props.post} />
+        </Popup>
+      )}
+      <CommentForm postId={props.post._id} />
     </PostWrapper>
   );
 }

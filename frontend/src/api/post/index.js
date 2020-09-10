@@ -14,13 +14,13 @@ export const deletePostApi = (id) => axios.delete(`/api/post/${id}`);
 
 export const toggleLikeApi = (id) => axios.get(`/api/posts/likes/${id}`);
 export const toggleSaveApi = (id) => axios.get(`/api/posts/saves/${id}`);
-export const addCommentApi = (body, id) => {
+export const addCommentApi = ({ id, text }) => {
   const config = {
     headers: {
       "Content-Type": "application/json",
     },
   };
-  return axios.post(`/api/posts/comment/${id}`, body, config);
+  return axios.post(`/api/posts/comment/${id}`, { text }, config);
 };
 export const deleteCommentApi = (id, commentId) =>
   axios.delete(`/api/posts/comment/${id}/${commentId}`);

@@ -13,6 +13,7 @@ import {
 } from "../actions/constants";
 
 import {
+  fetchPosts,
   addPostSuccess,
   fetchPostsSuccess,
   fetchPostSuccess,
@@ -88,7 +89,8 @@ function* deletePostSaga(action) {
 function* addCommentSaga(action) {
   try {
     const { data } = yield call(addCommentApi, action.body);
-    yield put(addCommentSuccess({ ...data, id: action.body }));
+    console.log("comment data", data);
+    yield put(addCommentSuccess(data.data));
   } catch (e) {
     const errors = e.response.data.errors;
     if (errors) {

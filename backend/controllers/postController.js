@@ -3,10 +3,15 @@ const User = require("../models/User");
 const Comment = require("../models/Comment");
 
 exports.getPosts = async (req, res) => {
-  const posts = await Post.find().populate({
-    path: "user",
-    select: "username fullname avatar",
-  });
+  const posts = await Post.find()
+    .populate({
+      path: "user",
+      select: "username fullname avatar",
+    })
+    .populate({
+      path: "comments",
+      populate: { path: "user", select: "username _id avatar" },
+    });
 
   res.status(200).json({ succcess: true, data: posts });
 };

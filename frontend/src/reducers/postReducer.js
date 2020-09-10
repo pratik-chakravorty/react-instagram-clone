@@ -4,6 +4,7 @@ import {
   FETCH_POSTS,
   FETCH_POSTS_SUCCESS,
   ADD_POST_SUCCESS,
+  ADD_COMMENT,
   ADD_COMMENT_SUCCESS,
 } from "../actions/constants";
 
@@ -37,6 +38,19 @@ export default function postReducer(state = initialState, action) {
         ...state,
         loading: false,
         posts: action.payload.data,
+      };
+    case ADD_COMMENT_SUCCESS:
+      return {
+        ...state,
+        posts: state.posts.map((post) =>
+          post._id === action.payload.post
+            ? {
+                ...post,
+                commentsCount: post.commentsCount + 1,
+                comments: post.comments.concat(action.payload),
+              }
+            : post
+        ),
       };
     default:
       return state;
