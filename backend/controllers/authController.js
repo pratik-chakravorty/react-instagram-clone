@@ -28,7 +28,7 @@ exports.register = async (req, res) => {
     jwt.sign(
       payload,
       config.get("jwtSecret"),
-      { expiresIn: 3600 },
+      { expiresIn: 3600000 },
       (err, token) => {
         if (err) throw err;
         res.json({ token });
@@ -68,8 +68,13 @@ exports.login = async (req, res) => {
 };
 
 exports.currentUser = async (req, res) => {
-  const user = await User.findById(req.user.id).select(
-    "avatar username fullname email _id website bio"
-  );
+  const user = await User.findById(req.user.id)
+    .select(
+      "avatar username fullname email _id website bio followersCount followingCount postCount"
+    )
+    .populate({
+      path: "posts",
+      select: "files likes likesCount caption comments commentsCount",
+    });
   res.status(200).json(user);
 };

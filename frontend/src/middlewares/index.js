@@ -9,6 +9,7 @@ import {
   FETCH_POST,
   DELETE_POST,
   SET_ALERT,
+  FETCH_USER,
 } from "../actions/constants";
 import setAuthToken from "../utils/setAuthToken";
 
@@ -18,6 +19,7 @@ export const retrieveLocalStorageTokenMiddleware = (_) => (next) => (
   let tokenNeededActions = [
     USER_LOADED,
     ADD_POST,
+    FETCH_USER,
     FETCH_POST,
     FETCH_POSTS,
     DELETE_POST,

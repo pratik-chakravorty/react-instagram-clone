@@ -1,4 +1,6 @@
 import React from "react";
+import Popup from "reactjs-popup";
+import { useSelector } from "react-redux";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import Container from "../../styles/Container";
@@ -8,6 +10,8 @@ import {
   ExploreIcon,
   HeartIcon,
   NewPostIcon,
+  ProfileIcon,
+  ProfileSavedIcon,
 } from "../features/Icons";
 import navLogo from "../../static/navlogo.png";
 
@@ -46,7 +50,23 @@ const NavWrapper = styled.div`
   }
 `;
 
+const ProfileLink = styled.a`
+  color: #000;
+  font-weight: 400;
+  display: flex;
+  align-items: center;
+  padding: 1rem 1rem;
+  margin-left: 5px;
+  span {
+    margin-left: 5px;
+  }
+`;
 function Nav() {
+  const popupRef = React.useRef();
+  const { user } = useSelector((state) => state.auth);
+  const handleProfileClick = () => {
+    popupRef.current.close();
+  };
   return (
     <NavWrapper>
       <Container>
@@ -73,6 +93,37 @@ function Nav() {
               <a>
                 <HeartIcon />
               </a>
+            </li>
+            <li>
+              <Popup
+                closeOnDocumentClick
+                ref={popupRef}
+                trigger={
+                  <img
+                    style={{
+                      width: "24px",
+                      height: "24px",
+                      objectFit: "cover",
+                      borderRadius: "12px",
+                    }}
+                    src={user?.avatar}
+                    alt="avatar"
+                  />
+                }
+              >
+                {" "}
+                <ProfileLink
+                  as={Link}
+                  onClick={handleProfileClick}
+                  to={`/${user?.username}`}
+                >
+                  <ProfileIcon />
+                  <span>Profile</span>
+                </ProfileLink>
+                <ProfileLink as={Link}>
+                  <span>Logout</span>
+                </ProfileLink>
+              </Popup>
             </li>
           </ul>
         </nav>

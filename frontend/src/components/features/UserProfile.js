@@ -1,20 +1,23 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { PostIcon, SavedIcon, HeartIcon } from "./Icons";
-import avatar from "../../static/default_avatar.jpg";
-import post from "../../static/detailed_post.jpg";
+import { fetchUser } from "../../actions/userActions";
+import PostGrid from "./PostGrid";
 
 const ProfileWrapper = styled.div`
   .profile-header {
     margin: 6rem auto;
     display: flex;
     align-items: flex-start;
-    justify-content: space-between;
     padding: 2rem;
 
     img {
       width: 30%;
       height: auto;
+      margin-right: 8rem;
+      border-radius: 50%;
     }
     .profile-info {
       h2 {
@@ -49,16 +52,6 @@ const ProfileWrapper = styled.div`
       border-top: 2px solid "#000";
     }
   }
-
-  .posts {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    column-gap: 20px;
-    img {
-      width: 90%;
-      height: auto;
-    }
-  }
 `;
 
 const Button = styled.button`
@@ -71,31 +64,43 @@ const Button = styled.button`
   border-radius: 4px;
   outline: none;
 `;
-function Profile() {
+function UserProfile({ match }) {
+  const userName = match.params.userName;
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(fetchUser(userName));
+  }, []);
+  const { user } = useSelector((state) => state.user);
   return (
     <ProfileWrapper>
       <div className="profile-header">
-        <img src={avatar} alt="profile-avatar" />
+        <img src={user.avatar} alt="profile-avatar" />
         <div className="profile-info">
-          <h2>Username</h2>
-          <Button>Edit Profile</Button>
+          <h2>{user.username}</h2>
+          <Button as={Link} to="/editProfile">
+            Edit Profile
+          </Button>
           <ul>
             <li>
-              <strong>38</strong> Posts
+              <strong>{user.postCount}</strong> Posts
             </li>
             <li>
-              <strong>103</strong> Followers
+              <strong>{user.followersCount}</strong> Followers
             </li>
             <li>
-              <strong>391</strong> Following
+              <strong>{user.followingCount}</strong> Following
             </li>
           </ul>
           <div className="bio">
             <h4>
-              <strong>Full Name</strong>
+              <strong>{user.fullname}</strong>
             </h4>
-            <p>Bio of the user goes here...</p>
-            <p>website</p>
+            <p>{user.bio ? user.bio : "Add a bio by editing your profile."}</p>
+            <p>
+              {user.website
+                ? user.website
+                : "Add a website by editing your profile."}
+            </p>
           </div>
         </div>
       </div>
@@ -115,28 +120,9 @@ function Profile() {
           Liked
         </div>
       </div>
-      <div className="posts">
-        <div className="img">
-          <img src={post} alt="post-image" />
-        </div>
-        <div className="img">
-          <img src={post} alt="post-image" />
-        </div>
-        <div className="img">
-          <img src={post} alt="post-image" />
-        </div>
-        <div className="img">
-          <img src={post} alt="post-image" />
-        </div>
-        <div className="img">
-          <img src={post} alt="post-image" />
-        </div>
-        <div className="img">
-          <img src={post} alt="post-image" />
-        </div>
-      </div>
+      {user?.posts && <PostGrid posts={user.posts} />}
     </ProfileWrapper>
   );
 }
 
-export default Profile;
+export default UserProfile;

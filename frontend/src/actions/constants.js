@@ -16,6 +16,8 @@ export const ADD_COMMENT_SUCCESS = "post/ADD_COMMENT_SUCCESS";
 // User Constants
 export const FETCH_USERS = "user/FETCH_USERS";
 export const FETCH_USERS_SUCCESS = "user/FETCH_USERS_SUCCESS";
+export const FETCH_USER = "user/FETCH_USER";
+export const FETCH_USER_SUCCESS = "user/FETCH_USER_SUCCESS";
 export const FOLLOW = "user/FOLLOW";
 export const UNFOLLOW = "user/UNFOLLOW";
 export const FETCH_FEED = "user/FEED";

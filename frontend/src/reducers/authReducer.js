@@ -6,8 +6,8 @@ import {
   LOGIN_SUCCESS,
   LOGIN_FAIL,
   LOGOUT,
+  UPDATE_USER_SUCCESS,
 } from "../actions/constants";
-
 const initialState = {
   token: localStorage.getItem("token"),
   isAuthenticated: false,
@@ -19,6 +19,7 @@ export default function (state = initialState, action) {
   const { type, payload } = action;
   switch (type) {
     case USER_LOADED_SUCCESS:
+    case UPDATE_USER_SUCCESS:
       return {
         ...state,
         isAuthenticated: true,

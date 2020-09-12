@@ -1,7 +1,6 @@
 import React from "react";
 import Popup from "reactjs-popup";
 import "reactjs-popup/dist/index.css";
-import detailed from "../../static/detailed_post.jpg";
 import avatar from "../../static/default_avatar.jpg";
 import CommentForm from "./CommentForm";
 import CommentList from "./CommentList";
