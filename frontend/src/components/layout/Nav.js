@@ -71,6 +71,10 @@ function Nav({ user }) {
   const handleProfileClick = () => {
     popupRef.current.close();
   };
+  const handleLogout = () => {
+    dispatch(logout());
+    history.push("/");
+  };
   return (
     <NavWrapper>
       <Container>
@@ -124,13 +128,7 @@ function Nav({ user }) {
                   <ProfileIcon />
                   <span>Profile</span>
                 </ProfileLink>
-                <ProfileLink
-                  as={Link}
-                  onClick={() => {
-                    dispatch(logout());
-                    history.push("/");
-                  }}
-                >
+                <ProfileLink as={Link} onClick={handleLogout}>
                   <span>Logout</span>
                 </ProfileLink>
               </Popup>

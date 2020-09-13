@@ -18,6 +18,7 @@ const ProfileWrapper = styled.div`
       height: 200px;
       margin-right: 8rem;
       border-radius: 50%;
+      object-fit: cover;
     }
     .profile-info {
       h2 {
