@@ -43,6 +43,7 @@ function* updateUserSaga(action) {
   try {
     const { data } = yield call(updateUserApi, action.body);
     yield put(fetchUserSuccess(data));
+    yield put(setAlert("User profile updated", "success", { id: v4() }));
   } catch (err) {
     const errors = err.response.data.errors;
     if (errors) {

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useSelector, useDispatch } from "react-redux";
 import styled from "styled-components";
@@ -7,10 +7,19 @@ import * as yup from "yup";
 import { Error, Input, SubmitButton } from "../../styles/CommonStyles";
 import { updateUser } from "../../actions/userActions";
 
+const SUPPORTED_FORMATS = ["image/jpg", "image/jpeg", "image/gif", "image/png"];
 const schema = yup.object().shape({
   username: yup.string().required(),
   bio: yup.string().required(),
   website: yup.string().required(),
+  files: yup
+    .mixed()
+    .required("A file is required")
+    .test(
+      "fileFormat",
+      "Unsupported Format",
+      (value) => value && SUPPORTED_FORMATS.includes(value[0].type)
+    ),
 });
 
 const EditProfileWrapper = styled.div`
@@ -23,9 +32,30 @@ const EditProfileWrapper = styled.div`
 `;
 
 function EditProfileForm() {
+  const alerts = useSelector((state) => state.alerts);
+  const [imageUrl, setImageUrl] = useState("");
+  const [formEnable, setFormEnable] = useState(true);
+  const uploadImage = async (e) => {
+    const files = e.target.files;
+    const data = new FormData();
+    data.append("file", files[0]);
+    data.append("upload_preset", "instagram_clone_pc");
+    const res = await fetch(
+      "https:///api.cloudinary.com/v1_1/pratik071253/image/upload",
+      {
+        method: "POST",
+        body: data,
+      }
+    );
+    const file = await res.json();
+    if (file.secure_url) {
+      setImageUrl(file.secure_url);
+      setFormEnable((preValue) => !preValue);
+    }
+  };
   const dispatch = useDispatch();
   const onSubmit = (values) => {
-    dispatch(updateUser(values));
+    dispatch(updateUser({ ...values, avatar: imageUrl }));
   };
   const { user } = useSelector((state) => state.auth);
   const { register, handleSubmit, errors } = useForm({
@@ -42,12 +72,19 @@ function EditProfileForm() {
     <EditProfileWrapper>
       <form onSubmit={handleSubmit(onSubmit)}>
         <Input
+          type="file"
+          ref={register}
+          name="files"
+          placeholder="Upload an image"
+          onChange={uploadImage}
+        />
+        {errors.files && <Error>{errors.files.message}</Error>}
+        <Input
           type="text"
           ref={register}
           name="username"
           placeholder="Username"
         />
-
         {errors.username && <Error>{errors.username.message}</Error>}
 
         <Input
@@ -68,7 +105,11 @@ function EditProfileForm() {
           placeholder="Website"
         />
         {errors.website && <Error>{errors.website.message}</Error>}
-        <SubmitButton type="submit" value="Edit Profile" />
+        <SubmitButton
+          type="submit"
+          value="Edit Profile"
+          disabled={formEnable}
+        />
       </form>
     </EditProfileWrapper>
   );

@@ -8,6 +8,19 @@ import { Error, Input, SubmitButton } from "../../styles/CommonStyles";
 import { addPost as addPostAction } from "../../actions/postActions";
 import styled from "styled-components";
 
+const SUPPORTED_FORMATS = ["image/jpg", "image/jpeg", "image/gif", "image/png"];
+const schema = yup.object().shape({
+  caption: yup.string().required(),
+  files: yup
+    .mixed()
+    .required("A file is required")
+    .test(
+      "fileFormat",
+      "Unsupported Format",
+      (value) => value && SUPPORTED_FORMATS.includes(value[0].type)
+    ),
+});
+
 const UploadFormWrapper = styled.div`
   max-width: 350px;
   background-color: ${(props) => props.theme.white};
@@ -43,12 +56,7 @@ function UploadForm() {
   const history = useHistory();
   const [formEnable, setFormEnable] = useState(true);
   const [imageUrl, setImageUrl] = useState("");
-  const SUPPORTED_FORMATS = [
-    "image/jpg",
-    "image/jpeg",
-    "image/gif",
-    "image/png",
-  ];
+
   const uploadImage = async (e) => {
     const files = e.target.files;
     const data = new FormData();
@@ -62,7 +70,6 @@ function UploadForm() {
       }
     );
     const file = await res.json();
-    console.log("file", file);
     if (file.secure_url) {
       setImageUrl(file.secure_url);
       setFormEnable((preValue) => !preValue);
@@ -71,21 +78,9 @@ function UploadForm() {
 
   const onSubmit = (values) => {
     let formData = { ...values, files: imageUrl };
-    console.log(formData);
     dispatch(addPostAction(formData));
     history.push("/feed");
   };
-  const schema = yup.object().shape({
-    caption: yup.string().required(),
-    files: yup
-      .mixed()
-      .required("A file is required")
-      .test(
-        "fileFormat",
-        "Unsupported Format",
-        (value) => value && SUPPORTED_FORMATS.includes(value[0].type)
-      ),
-  });
 
   const { register, handleSubmit, errors, formState } = useForm({
     resolver: yupResolver(schema),

@@ -9,14 +9,14 @@ import GuestRoutes from "./components/routing/GuestRoutes";
 // setup routes here
 function App() {
   const dispatch = useDispatch();
-  const { isAuthenticated } = useSelector((state) => state.auth);
+  const { isAuthenticated, user } = useSelector((state) => state.auth);
   useEffect(() => {
     dispatch(loadUserAction());
   }, []);
   return (
     <React.Fragment>
       <Router>
-        {isAuthenticated && <Nav />}
+        {isAuthenticated && <Nav user={user} />}
         <GuestRoutes />
         {isAuthenticated ? <UserRoutes /> : null}
       </Router>

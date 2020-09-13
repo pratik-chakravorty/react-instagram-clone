@@ -1,6 +1,8 @@
 import React from "react";
+import { useDispatch } from "react-redux";
 import Popup from "reactjs-popup";
 import { useSelector } from "react-redux";
+import { useHistory } from "react-router-dom";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import Container from "../../styles/Container";
@@ -13,6 +15,7 @@ import {
   ProfileIcon,
   ProfileSavedIcon,
 } from "../features/Icons";
+import { logout } from "../../actions/authActions";
 import navLogo from "../../static/navlogo.png";
 
 const NavWrapper = styled.div`
@@ -61,9 +64,10 @@ const ProfileLink = styled.a`
     margin-left: 5px;
   }
 `;
-function Nav() {
+function Nav({ user }) {
+  const dispatch = useDispatch();
+  const history = useHistory();
   const popupRef = React.useRef();
-  const { user } = useSelector((state) => state.auth);
   const handleProfileClick = () => {
     popupRef.current.close();
   };
@@ -120,7 +124,13 @@ function Nav() {
                   <ProfileIcon />
                   <span>Profile</span>
                 </ProfileLink>
-                <ProfileLink as={Link}>
+                <ProfileLink
+                  as={Link}
+                  onClick={() => {
+                    dispatch(logout());
+                    history.push("/");
+                  }}
+                >
                   <span>Logout</span>
                 </ProfileLink>
               </Popup>

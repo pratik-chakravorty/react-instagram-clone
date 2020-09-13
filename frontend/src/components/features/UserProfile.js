@@ -14,8 +14,8 @@ const ProfileWrapper = styled.div`
     padding: 2rem;
 
     img {
-      width: 30%;
-      height: auto;
+      width: 200px;
+      height: 200px;
       margin-right: 8rem;
       border-radius: 50%;
     }

@@ -11,7 +11,8 @@ const CommentListFullWrapper = styled.div`
   vertical-align: middle;
   img {
     border-radius: 50%;
-    width: 15%;
+    width: 20px;
+    height: 20px;
     margin-right: 10px;
   }
   .post-content {
