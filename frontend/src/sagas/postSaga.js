@@ -10,6 +10,7 @@ import {
   ADD_COMMENT,
   ADD_COMMENT_SUCCESS,
   DELETE_POST,
+  TOGGLE_LIKE,
 } from "../actions/constants";
 
 import {
@@ -20,6 +21,7 @@ import {
   deletePost,
   deletePostSuccess,
   addCommentSuccess,
+  toggleLikeSuccess,
 } from "../actions/postActions";
 
 import {
@@ -100,12 +102,28 @@ function* addCommentSaga(action) {
     }
   }
 }
+
+function* toggleLikeSaga(action) {
+  try {
+    const { data } = yield call(toggleLikeApi, action.body.id);
+    yield put(toggleLikeSuccess({ id: action.body.id, likes: data.likes }));
+  } catch (e) {
+    const errors = e.response.data.errors;
+    if (errors) {
+      yield all(
+        errors.map((error) => put(setAlert(error.msg, "error", { id: v4() })))
+      );
+    }
+  }
+}
+
 function* postSaga() {
   yield takeLatest(FETCH_POST, fetchPostSaga);
   yield takeLatest(FETCH_POSTS, fetchPostsSaga);
   yield takeLatest(ADD_POST, addPostSaga);
   yield takeLatest(DELETE_POST, deletePostSaga);
   yield takeLatest(ADD_COMMENT, addCommentSaga);
+  yield takeLatest(TOGGLE_LIKE, toggleLikeSaga);
 }
 
 export default postSaga;

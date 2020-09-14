@@ -121,7 +121,13 @@ exports.toggleLike = async (req, res) => {
     await post.save();
   }
 
-  res.status(200).json({ success: true, msg: "Liked Toggled Successfully" });
+  res
+    .status(200)
+    .json({
+      success: true,
+      msg: "Liked Toggled Successfully",
+      likes: post.likes,
+    });
 };
 
 exports.addComment = async (req, res) => {

@@ -8,6 +8,8 @@ import {
   ADD_COMMENT,
   ADD_COMMENT_SUCCESS,
   DELETE_POST,
+  TOGGLE_LIKE,
+  TOGGLE_LIKE_SUCCESS,
 } from "./constants";
 
 export const addPost = (body) => ({
@@ -51,5 +53,15 @@ export const addComment = (body) => ({
 
 export const addCommentSuccess = (payload) => ({
   type: ADD_COMMENT_SUCCESS,
+  payload,
+});
+
+export const toggleLike = (id) => ({
+  type: TOGGLE_LIKE,
+  body: { id },
+});
+
+export const toggleLikeSuccess = (payload) => ({
+  type: TOGGLE_LIKE_SUCCESS,
   payload,
 });

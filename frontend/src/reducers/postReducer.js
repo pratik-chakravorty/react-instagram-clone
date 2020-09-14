@@ -3,6 +3,7 @@ import {
   FETCH_POST_SUCCESS,
   FETCH_POSTS,
   FETCH_POSTS_SUCCESS,
+  TOGGLE_LIKE_SUCCESS,
   ADD_POST_SUCCESS,
   ADD_COMMENT,
   ADD_COMMENT_SUCCESS,
@@ -49,6 +50,15 @@ export default function postReducer(state = initialState, action) {
                 commentsCount: post.commentsCount + 1,
                 comments: post.comments.concat(action.payload),
               }
+            : post
+        ),
+      };
+    case TOGGLE_LIKE_SUCCESS:
+      return {
+        ...state,
+        posts: state.posts.map((post) =>
+          post._id === action.payload.id
+            ? { ...post, likes: action.payload.likes }
             : post
         ),
       };

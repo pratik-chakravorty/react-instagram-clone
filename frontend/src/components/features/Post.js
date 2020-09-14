@@ -3,9 +3,17 @@ import Popup from "reactjs-popup";
 import "reactjs-popup/dist/index.css";
 import avatar from "../../static/default_avatar.jpg";
 import CommentForm from "./CommentForm";
+import { useDispatch, useSelector } from "react-redux";
+import { toggleLike } from "../../actions/postActions";
 import CommentList from "./CommentList";
 import PostDetail from "./PostDetail";
-import { CommentIcon, HeartIcon, InboxIcon, BookmarkIcon } from "./Icons";
+import {
+  CommentIcon,
+  HeartIcon,
+  HeartIconFilled,
+  InboxIcon,
+  BookmarkIcon,
+} from "./Icons";
 import styled from "styled-components";
 
 const PostWrapper = styled.div`
@@ -77,7 +85,10 @@ const PostWrapper = styled.div`
   }
 `;
 function Post(props) {
+  const { user } = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
   const contentStyle = { padding: "0", border: "0", width: "60%" };
+  const handleLike = () => dispatch(toggleLike(props.post._id));
   return (
     <PostWrapper>
       <div className="post-heading">
@@ -96,7 +107,11 @@ function Post(props) {
             <InboxIcon />
           </li>
           <li className="right">
-            <HeartIcon />
+            {props.post?.likes.includes(user._id) ? (
+              <HeartIconFilled onClick={handleLike} />
+            ) : (
+              <HeartIcon onClick={handleLike} />
+            )}
           </li>
           <li>
             <BookmarkIcon />
@@ -119,7 +134,7 @@ function Post(props) {
           modal={true}
           lockScroll
           trigger={
-            <p class="para-muted">
+            <p className="para-muted">
               View all {props.post.commentsCount} comments
             </p>
           }
