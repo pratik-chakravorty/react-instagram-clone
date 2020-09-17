@@ -53,6 +53,7 @@ function* updateUserSaga(action) {
     }
   }
 }
+
 function* userSaga() {
   yield takeLatest(FETCH_USER, fetchUserSaga);
   yield takeLatest(UPDATE_USER, updateUserSaga);

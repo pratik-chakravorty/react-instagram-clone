@@ -7,6 +7,8 @@ import {
   LOGIN,
   LOGIN_SUCCESS,
   LOGOUT,
+  TOGGLE_SAVE,
+  TOGGLE_SAVE_SUCCESS,
 } from "./constants";
 
 // auth error
@@ -49,4 +51,14 @@ export const loginSuccess = (payload) => ({
 // logout
 export const logout = () => ({
   type: LOGOUT,
+});
+
+export const toggleSave = (id) => ({
+  type: TOGGLE_SAVE,
+  body: { id },
+});
+
+export const toggleSaveSuccess = (payload) => ({
+  type: TOGGLE_SAVE_SUCCESS,
+  payload,
 });

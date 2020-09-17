@@ -1,8 +1,13 @@
 import { takeLatest, call, put, all } from "redux-saga/effects";
 import { v4 } from "uuid";
-import { REGISTER, USER_LOADED, LOGIN } from "../actions/constants";
+import {
+  REGISTER,
+  USER_LOADED,
+  LOGIN,
+  TOGGLE_SAVE,
+} from "../actions/constants";
 
-import { registerApi, loginApi, loadUserApi } from "../api/auth";
+import { registerApi, loginApi, loadUserApi, toggleSaveApi } from "../api/auth";
 
 import {
   loadUser,
@@ -10,6 +15,7 @@ import {
   registerSuccess,
   loginSuccess,
   authError,
+  toggleSaveSuccess,
 } from "../actions/authActions";
 
 import { setAlert } from "../actions/alertActions";
@@ -65,10 +71,26 @@ function* userLoadedSaga() {
   }
 }
 
+function* toggleSaveSaga(action) {
+  try {
+    const { data } = yield call(toggleSaveApi, action.body.id);
+    yield put(
+      toggleSaveSuccess({ id: action.body.id, likes: data.savedPosts })
+    );
+  } catch (e) {
+    const errors = e.response.data.errors;
+    if (errors) {
+      yield all(
+        errors.map((error) => put(setAlert(error.msg, "error", { id: v4() })))
+      );
+    }
+  }
+}
 function* authSagas() {
   yield takeLatest(REGISTER, registerUserSaga);
   yield takeLatest(LOGIN, loginUserSaga);
   yield takeLatest(USER_LOADED, userLoadedSaga);
+  yield takeLatest(TOGGLE_SAVE, toggleSaveSaga);
 }
 
 export default authSagas;

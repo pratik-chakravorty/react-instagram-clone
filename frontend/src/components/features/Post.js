@@ -5,6 +5,7 @@ import avatar from "../../static/default_avatar.jpg";
 import CommentForm from "./CommentForm";
 import { useDispatch, useSelector } from "react-redux";
 import { toggleLike } from "../../actions/postActions";
+import { toggleSave } from "../../actions/authActions";
 import CommentList from "./CommentList";
 import PostDetail from "./PostDetail";
 import {
@@ -13,6 +14,7 @@ import {
   HeartIconFilled,
   InboxIcon,
   BookmarkIcon,
+  BookmarkIconFilled,
 } from "./Icons";
 import styled from "styled-components";
 
@@ -89,6 +91,7 @@ function Post(props) {
   const dispatch = useDispatch();
   const contentStyle = { padding: "0", border: "0", width: "60%" };
   const handleLike = () => dispatch(toggleLike(props.post._id));
+  const handleSave = () => dispatch(toggleSave(props.post._id));
   return (
     <PostWrapper>
       <div className="post-heading">
@@ -114,7 +117,11 @@ function Post(props) {
             )}
           </li>
           <li>
-            <BookmarkIcon />
+            {user?.savedPosts?.includes(props.post._id) ? (
+              <BookmarkIconFilled onClick={handleSave} />
+            ) : (
+              <BookmarkIcon onClick={handleSave} />
+            )}
           </li>
         </ul>
       </div>

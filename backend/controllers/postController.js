@@ -121,13 +121,11 @@ exports.toggleLike = async (req, res) => {
     await post.save();
   }
 
-  res
-    .status(200)
-    .json({
-      success: true,
-      msg: "Liked Toggled Successfully",
-      likes: post.likes,
-    });
+  res.status(200).json({
+    success: true,
+    msg: "Liked Toggled Successfully",
+    likes: post.likes,
+  });
 };
 
 exports.addComment = async (req, res) => {
@@ -216,19 +214,20 @@ exports.toggleSave = async (req, res) => {
     return res.status(404).json({ msg: "No post found" });
   }
 
-  const { user } = req;
-
-  if (user.savedPosts.includes(req.params.id)) {
-    console.log("removing saved post");
+  const user = await User.findById(req.user.id);
+  if (user && user.savedPosts && user.savedPosts.includes(req.params.id)) {
     await User.findByIdAndUpdate(user.id, {
       $pull: { savedPosts: req.params.id },
     });
   } else {
-    console.log("adding the saved post");
     await User.findByIdAndUpdate(user.id, {
       $push: { savedPosts: req.params.id },
     });
   }
 
-  req.status(200).json({ success: true, msg: "Post saved successfully" });
+  req.status(200).json({
+    success: true,
+    msg: "Post saved successfully",
+    savedPosts: user.savedPosts,
+  });
 };

@@ -10,6 +10,7 @@ import {
   DELETE_POST,
   SET_ALERT,
   FETCH_USER,
+  TOGGLE_SAVE,
 } from "../actions/constants";
 import setAuthToken from "../utils/setAuthToken";
 
@@ -23,6 +24,7 @@ export const retrieveLocalStorageTokenMiddleware = (_) => (next) => (
     FETCH_POST,
     FETCH_POSTS,
     DELETE_POST,
+    TOGGLE_SAVE,
   ];
   if (localStorage.token && tokenNeededActions.includes(action.type)) {
     setAuthToken(localStorage.token);

@@ -11,6 +11,7 @@ import {
   SEARCH_USER_SUCCESS,
   UPDATE_USER,
   UPDATE_USER_SUCCESS,
+  TOGGLE_SAVE_SUCCESS,
 } from "../actions/constants";
 
 const initialState = {

@@ -13,7 +13,6 @@ export const addPostApi = (body) => {
 export const deletePostApi = (id) => axios.delete(`/api/post/${id}`);
 
 export const toggleLikeApi = (id) => axios.get(`/api/posts/likes/${id}`);
-export const toggleSaveApi = (id) => axios.get(`/api/posts/saves/${id}`);
 export const addCommentApi = ({ id, text }) => {
   const config = {
     headers: {

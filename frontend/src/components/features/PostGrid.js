@@ -3,12 +3,12 @@ import styled from "styled-components";
 
 const PostWrapper = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  grid-gap: 20px;
+  grid-template-columns: repeat(3, 320px);
+  grid-gap: 10px;
 `;
 const Image = styled.img`
-  width: 214px;
-  height: 214px;
+  width: 300px;
+  height: 300px;
   object-fit: cover;
 `;
 function PostGrid({ posts }) {

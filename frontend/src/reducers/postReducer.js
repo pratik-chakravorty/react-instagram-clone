@@ -7,6 +7,7 @@ import {
   ADD_POST_SUCCESS,
   ADD_COMMENT,
   ADD_COMMENT_SUCCESS,
+  TOGGLE_SAVE_SUCCESS,
 } from "../actions/constants";
 
 const initialState = {
@@ -62,6 +63,7 @@ export default function postReducer(state = initialState, action) {
             : post
         ),
       };
+
     default:
       return state;
   }

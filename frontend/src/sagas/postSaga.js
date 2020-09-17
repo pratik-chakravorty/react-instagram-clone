@@ -11,6 +11,7 @@ import {
   ADD_COMMENT_SUCCESS,
   DELETE_POST,
   TOGGLE_LIKE,
+  TOGGLE_SAVE,
 } from "../actions/constants";
 
 import {
@@ -22,6 +23,7 @@ import {
   deletePostSuccess,
   addCommentSuccess,
   toggleLikeSuccess,
+  toggleSaveSuccess,
 } from "../actions/postActions";
 
 import {
@@ -30,7 +32,6 @@ import {
   addPostApi,
   deletePostApi,
   toggleLikeApi,
-  toggleSaveApi,
   addCommentApi,
   deleteCommentApi,
   searchPostApi,

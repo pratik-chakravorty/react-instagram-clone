@@ -11,6 +11,8 @@ import {
   SEARCH_USER_SUCCESS,
   UPDATE_USER,
   UPDATE_USER_SUCCESS,
+  TOGGLE_SAVE,
+  TOGGLE_SAVE_SUCCESS,
 } from "./constants";
 
 export const fetchUsers = () => ({

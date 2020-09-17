@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
+import { Switch, Route, useRouteMatch, Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { PostIcon, SavedIcon, HeartIcon } from "./Icons";
 import { fetchUser } from "../../actions/userActions";
@@ -67,11 +67,13 @@ const Button = styled.button`
 `;
 function UserProfile({ match }) {
   const userName = match.params.userName;
+  const { path, url } = useRouteMatch();
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(fetchUser(userName));
   }, []);
   const { user } = useSelector((state) => state.user);
+  const posts = user?.posts;
   return (
     <ProfileWrapper>
       <div className="profile-header">
@@ -105,24 +107,44 @@ function UserProfile({ match }) {
           </div>
         </div>
       </div>
-      {/* Nested Routes should go here... */}
+
       <div className="posts-header">
         <div className="tab active">
-          {" "}
-          <PostIcon />
-          Posts
+          <Link to={url}>
+            <PostIcon />
+            Posts
+          </Link>
         </div>
         <div className="tab active">
-          {" "}
-          <SavedIcon />
-          Saved
+          <Link to={`${url}/saved`}>
+            <SavedIcon />
+            Saved
+          </Link>
         </div>
         <div className="tab active">
-          <HeartIcon />
-          Liked
+          <Link to={`${url}/liked`}>
+            <HeartIcon />
+            Liked
+          </Link>
         </div>
       </div>
-      {user?.posts && <PostGrid posts={user.posts} />}
+      <Switch>
+        <Route
+          exact
+          path={path}
+          render={() => posts && <PostGrid posts={posts} />}
+        />
+        <Route
+          exact
+          path={`${path}/saved`}
+          render={() => <h2>Saved Posts Goes here...</h2>}
+        />
+        <Route
+          exact
+          path={`${path}/liked`}
+          render={() => <h2>Liked Posts Goes Here...</h2>}
+        />
+      </Switch>
     </ProfileWrapper>
   );
 }

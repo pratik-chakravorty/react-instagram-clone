@@ -22,3 +22,5 @@ export const loginApi = (body) => {
 
 // get current user
 export const loadUserApi = () => axios.get("/api/auth/me");
+
+export const toggleSaveApi = (id) => axios.get(`/api/posts/saves/${id}`);

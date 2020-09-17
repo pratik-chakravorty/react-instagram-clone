@@ -10,6 +10,8 @@ import {
   DELETE_POST,
   TOGGLE_LIKE,
   TOGGLE_LIKE_SUCCESS,
+  TOGGLE_SAVE,
+  TOGGLE_SAVE_SUCCESS,
 } from "./constants";
 
 export const addPost = (body) => ({

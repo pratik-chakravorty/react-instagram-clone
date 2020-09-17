@@ -7,6 +7,7 @@ import {
   LOGIN_FAIL,
   LOGOUT,
   UPDATE_USER_SUCCESS,
+  TOGGLE_SAVE_SUCCESS,
 } from "../actions/constants";
 const initialState = {
   token: localStorage.getItem("token"),
@@ -33,6 +34,11 @@ export default function (state = initialState, action) {
         isAuthenticated: true,
         loading: false,
         token: payload.token,
+      };
+    case TOGGLE_SAVE_SUCCESS:
+      return {
+        ...state,
+        user: { ...state.user, savedPosts: action.payload },
       };
     case REGISTER_FAIL:
     case AUTH_ERROR:
