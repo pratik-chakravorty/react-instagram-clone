@@ -35,10 +35,11 @@ export default function (state = initialState, action) {
         loading: false,
         token: payload.token,
       };
+
     case TOGGLE_SAVE_SUCCESS:
       return {
         ...state,
-        user: { ...state.user, savedPosts: action.payload },
+        user: { ...state.user, savedPosts: [...action.payload.savedPosts] },
       };
     case REGISTER_FAIL:
     case AUTH_ERROR:

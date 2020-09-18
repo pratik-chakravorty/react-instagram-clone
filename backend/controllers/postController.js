@@ -215,17 +215,17 @@ exports.toggleSave = async (req, res) => {
   }
 
   const user = await User.findById(req.user.id);
-  if (user && user.savedPosts && user.savedPosts.includes(req.params.id)) {
-    await User.findByIdAndUpdate(user.id, {
-      $pull: { savedPosts: req.params.id },
-    });
+
+  if (user.savedPosts.includes(req.params.id)) {
+    const index = user.savedPosts.indexOf(req.params.id);
+    user.savedPosts.splice(index, 1);
+    await user.save();
   } else {
-    await User.findByIdAndUpdate(user.id, {
-      $push: { savedPosts: req.params.id },
-    });
+    user.savedPosts.push(req.params.id);
+    await user.save();
   }
 
-  req.status(200).json({
+  res.status(200).json({
     success: true,
     msg: "Post saved successfully",
     savedPosts: user.savedPosts,

@@ -1,8 +1,8 @@
 import React from "react";
 import styled from "styled-components";
+import PostActions from "./PostActions";
 import CommentForm from "./CommentForm";
 import CommentListFull from "./CommentListFull";
-import { CommentIcon, HeartIcon, InboxIcon, BookmarkIcon } from "./Icons";
 
 const PostDetailWrapper = styled.div`
   display: grid;
@@ -126,20 +126,7 @@ function PostDetail({ post }) {
           <CommentListFull post={post} commentsRef={commentsRef} />
         </div>
         <div className="post-actions">
-          <ul>
-            <li>
-              <CommentIcon />
-            </li>
-            <li>
-              <InboxIcon />
-            </li>
-            <li className="right">
-              <HeartIcon />
-            </li>
-            <li>
-              <BookmarkIcon />
-            </li>
-          </ul>
+          <PostActions post={post} />
         </div>
         <div className="likes">
           <img src={post.user.avatar} alt="avatar" />

@@ -11,17 +11,17 @@ const Image = styled.img`
   height: 300px;
   object-fit: cover;
 `;
-function PostGrid({ posts }) {
+function PhotoGrid({ items }) {
   return (
     <PostWrapper>
-      {posts.map((post) => (
+      {items.map((item) => (
         <div>
           {" "}
-          <Image src={post.files[0]} />
+          <Image src={item.files[0]} />
         </div>
       ))}
     </PostWrapper>
   );
 }
 
-export default PostGrid;
+export default PhotoGrid;

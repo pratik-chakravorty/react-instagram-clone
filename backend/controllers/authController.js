@@ -70,7 +70,7 @@ exports.login = async (req, res) => {
 exports.currentUser = async (req, res) => {
   const user = await User.findById(req.user.id)
     .select(
-      "avatar username fullname email _id website bio followersCount followingCount postCount"
+      "avatar username fullname email _id website bio followersCount followingCount postCount savedPosts"
     )
     .populate({
       path: "posts",

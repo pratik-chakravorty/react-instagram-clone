@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import { PostIcon, SavedIcon, HeartIcon } from "./Icons";
 import { fetchUser } from "../../actions/userActions";
-import PostGrid from "./PostGrid";
+import PhotoGrid from "./PhotoGrid";
 
 const ProfileWrapper = styled.div`
   .profile-header {
@@ -74,6 +74,8 @@ function UserProfile({ match }) {
   }, []);
   const { user } = useSelector((state) => state.user);
   const posts = user?.posts;
+  const savedPosts = user?.savedPosts;
+  const likedPosts = user?.likedPosts;
   return (
     <ProfileWrapper>
       <div className="profile-header">
@@ -132,17 +134,18 @@ function UserProfile({ match }) {
         <Route
           exact
           path={path}
-          render={() => posts && <PostGrid posts={posts} />}
+          render={() => posts && <PhotoGrid items={posts} />}
         />
+        {/* Only available to logged in user */}
         <Route
           exact
           path={`${path}/saved`}
-          render={() => <h2>Saved Posts Goes here...</h2>}
+          render={() => <PhotoGrid items={savedPosts} />}
         />
         <Route
           exact
           path={`${path}/liked`}
-          render={() => <h2>Liked Posts Goes Here...</h2>}
+          render={() => <PhotoGrid items={likedPosts} />}
         />
       </Switch>
     </ProfileWrapper>

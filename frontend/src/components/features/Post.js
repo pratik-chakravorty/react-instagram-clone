@@ -4,18 +4,10 @@ import "reactjs-popup/dist/index.css";
 import avatar from "../../static/default_avatar.jpg";
 import CommentForm from "./CommentForm";
 import { useDispatch, useSelector } from "react-redux";
-import { toggleLike } from "../../actions/postActions";
-import { toggleSave } from "../../actions/authActions";
+
 import CommentList from "./CommentList";
 import PostDetail from "./PostDetail";
-import {
-  CommentIcon,
-  HeartIcon,
-  HeartIconFilled,
-  InboxIcon,
-  BookmarkIcon,
-  BookmarkIconFilled,
-} from "./Icons";
+import PostActions from "./PostActions";
 import styled from "styled-components";
 
 const PostWrapper = styled.div`
@@ -86,44 +78,17 @@ const PostWrapper = styled.div`
     align-items: center;
   }
 `;
-function Post(props) {
-  const { user } = useSelector((state) => state.auth);
-  const dispatch = useDispatch();
+function Post({ post }) {
   const contentStyle = { padding: "0", border: "0", width: "60%" };
-  const handleLike = () => dispatch(toggleLike(props.post._id));
-  const handleSave = () => dispatch(toggleSave(props.post._id));
   return (
     <PostWrapper>
       <div className="post-heading">
-        <img src={props.post?.user?.avatar} alt="avatar" />
-        <h3>{props.post?.user?.username}</h3>
+        <img src={post?.user?.avatar} alt="avatar" />
+        <h3>{post?.user?.username}</h3>
       </div>
-      {props.post?.files[0] && (
-        <img src={props.post?.files[0]} alt="detailed-image" />
-      )}
+      {post?.files[0] && <img src={post?.files[0]} alt="detailed-image" />}
       <div className="post-actions">
-        <ul>
-          <li>
-            <CommentIcon />
-          </li>
-          <li>
-            <InboxIcon />
-          </li>
-          <li className="right">
-            {props.post?.likes.includes(user._id) ? (
-              <HeartIconFilled onClick={handleLike} />
-            ) : (
-              <HeartIcon onClick={handleLike} />
-            )}
-          </li>
-          <li>
-            {user?.savedPosts?.includes(props.post._id) ? (
-              <BookmarkIconFilled onClick={handleSave} />
-            ) : (
-              <BookmarkIcon onClick={handleSave} />
-            )}
-          </li>
-        </ul>
+        <PostActions post={post} />
       </div>
       <div className="likes">
         <img src={avatar} alt="avatar" />
@@ -132,26 +97,24 @@ function Post(props) {
         </p>
       </div>
       <div className="post-content">
-        <h3>{props.post?.user?.username}</h3>
-        <p>{props.post?.caption}</p>
+        <h3>{post?.user?.username}</h3>
+        <p>{post?.caption}</p>
       </div>
-      <CommentList comments={props.post.comments} />
-      {props.post.commentsCount > 5 && (
+      <CommentList comments={post.comments} />
+      {post.commentsCount > 5 && (
         <Popup
           modal={true}
           lockScroll
           trigger={
-            <p className="para-muted">
-              View all {props.post.commentsCount} comments
-            </p>
+            <p className="para-muted">View all {post.commentsCount} comments</p>
           }
           {...{ contentStyle }}
           position="center center"
         >
-          <PostDetail post={props.post} />
+          <PostDetail post={post} />
         </Popup>
       )}
-      <CommentForm postId={props.post._id} />
+      <CommentForm postId={post._id} />
     </PostWrapper>
   );
 }

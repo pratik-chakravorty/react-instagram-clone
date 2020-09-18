@@ -69,7 +69,12 @@ exports.getUser = async (req, res) => {
 
   user.isMe = req.user.id === user._id.toString();
 
-  res.status(200).json({ success: true, data: user });
+  // get the posts liked by user.
+  // 1. get all await Post.find({savedPosts: req.user})
+
+  const likedPosts = await Post.find({ likes: user._id });
+
+  res.status(200).json({ success: true, data: { ...user, likedPosts } });
 };
 
 exports.follow = async (req, res) => {

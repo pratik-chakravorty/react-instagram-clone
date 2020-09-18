@@ -75,7 +75,7 @@ function* toggleSaveSaga(action) {
   try {
     const { data } = yield call(toggleSaveApi, action.body.id);
     yield put(
-      toggleSaveSuccess({ id: action.body.id, likes: data.savedPosts })
+      toggleSaveSuccess({ id: action.body.id, savedPosts: data.savedPosts })
     );
   } catch (e) {
     const errors = e.response.data.errors;
