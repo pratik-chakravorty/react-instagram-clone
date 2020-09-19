@@ -5,7 +5,7 @@ import UserProfile from "../features/UserProfile";
 function Profile(props) {
   return (
     <Container>
-      <UserProfile {...props} />;
+      <UserProfile {...props} />
     </Container>
   );
 }

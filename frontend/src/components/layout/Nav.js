@@ -1,14 +1,16 @@
-import React from "react";
+import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import Popup from "reactjs-popup";
 import { useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
+import { usePrevious } from "../../hooks";
 import Container from "../../styles/Container";
 import Search from "../features/Search";
 import {
   HomeIcon,
+  HomeIconFilled,
   ExploreIcon,
   HeartIcon,
   NewPostIcon,
@@ -65,6 +67,8 @@ const ProfileLink = styled.a`
   }
 `;
 function Nav({ user }) {
+  const [current, setCurrent] = useState("home-feed");
+  const prevCurrent = usePrevious(current);
   const dispatch = useDispatch();
   const history = useHistory();
   const popupRef = React.useRef();
@@ -83,23 +87,23 @@ function Nav({ user }) {
           <Search />
           <ul>
             <li>
-              <Link to="/feed">
-                <HomeIcon />
+              <Link to="/feed" onClick={() => setCurrent("home-feed")}>
+                {current === "home-feed" ? <HomeIconFilled /> : <HomeIcon />}
               </Link>
             </li>
             <li>
-              <Link to="/new">
+              <Link to="/new" onClick={() => setCurrent("")}>
                 <NewPostIcon />
               </Link>
             </li>
             <li>
               <a>
-                <ExploreIcon />
+                <ExploreIcon onClick={() => setCurrent("")} />
               </a>
             </li>
             <li>
               <a>
-                <HeartIcon />
+                <HeartIcon onClick={() => setCurrent("")} />
               </a>
             </li>
             <li>

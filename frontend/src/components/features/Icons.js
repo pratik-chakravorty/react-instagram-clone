@@ -1,7 +1,8 @@
 import React from "react";
 
-export const HomeIcon = () => (
+export const HomeIcon = (props) => (
   <svg
+    {...props}
     aria-label="Home"
     fill="#262626"
     height="22"
@@ -9,6 +10,19 @@ export const HomeIcon = () => (
     width="22"
   >
     <path d="M45.3 48H30c-.8 0-1.5-.7-1.5-1.5V34.2c0-2.6-2-4.6-4.6-4.6s-4.6 2-4.6 4.6v12.3c0 .8-.7 1.5-1.5 1.5H2.5c-.8 0-1.5-.7-1.5-1.5V23c0-.4.2-.8.4-1.1L22.9.4c.6-.6 1.5-.6 2.1 0l21.5 21.5c.4.4.6 1.1.3 1.6 0 .1-.1.1-.1.2v22.8c.1.8-.6 1.5-1.4 1.5zm-13.8-3h12.3V23.4L24 3.6l-20 20V45h12.3V34.2c0-4.3 3.3-7.6 7.6-7.6s7.6 3.3 7.6 7.6V45z"></path>
+  </svg>
+);
+
+export const HomeIconFilled = (props) => (
+  <svg
+    {...props}
+    aria-label="Home"
+    fill="#262626"
+    height="22"
+    viewBox="0 0 48 48"
+    width="22"
+  >
+    <path d="M45.5 48H30.1c-.8 0-1.5-.7-1.5-1.5V34.2c0-2.6-2.1-4.6-4.6-4.6s-4.6 2.1-4.6 4.6v12.3c0 .8-.7 1.5-1.5 1.5H2.5c-.8 0-1.5-.7-1.5-1.5V23c0-.4.2-.8.4-1.1L22.9.4c.6-.6 1.6-.6 2.1 0l21.5 21.5c.3.3.4.7.4 1.1v23.5c.1.8-.6 1.5-1.4 1.5z"></path>
   </svg>
 );
 
@@ -98,7 +112,6 @@ export const BookmarkIconFilled = (props) => (
   <svg
     {...props}
     aria-label="Remove"
-    class="_8-yf5 "
     fill="#262626"
     height="22"
     viewBox="0 0 48 48"
@@ -170,9 +183,9 @@ export const PostIcon = (props) => (
   <svg
     aria-label="Posts"
     fill="#262626"
-    height="12"
+    height="22"
     viewBox="0 0 48 48"
-    width="12"
+    width="22"
   >
     <path
       clipRule="evenodd"
@@ -186,9 +199,9 @@ export const SavedIcon = (props) => (
   <svg
     aria-label="Saved"
     fill="#8e8e8e"
-    height="12"
+    height="22"
     viewBox="0 0 48 48"
-    width="12"
+    width="22"
   >
     <path d="M43.5 48c-.4 0-.8-.2-1.1-.4L24 29 5.6 47.6c-.4.4-1.1.6-1.6.3-.6-.2-1-.8-1-1.4v-45C3 .7 3.7 0 4.5 0h39c.8 0 1.5.7 1.5 1.5v45c0 .6-.4 1.2-.9 1.4-.2.1-.4.1-.6.1zM24 26c.8 0 1.6.3 2.2.9l15.8 16V3H6v39.9l15.8-16c.6-.6 1.4-.9 2.2-.9z"></path>
   </svg>

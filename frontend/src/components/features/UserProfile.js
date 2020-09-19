@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Switch, Route, useRouteMatch, Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
@@ -50,7 +50,7 @@ const ProfileWrapper = styled.div`
     }
 
     .active {
-      border-top: 2px solid "#000";
+      border-top: 1px solid #000;
     }
   }
 `;
@@ -76,6 +76,7 @@ function UserProfile({ match }) {
   const posts = user?.posts;
   const savedPosts = user?.savedPosts;
   const likedPosts = user?.likedPosts;
+  const [currentTab, setCurrentTab] = useState("tab-posts");
   return (
     <ProfileWrapper>
       <div className="profile-header">
@@ -111,20 +112,32 @@ function UserProfile({ match }) {
       </div>
 
       <div className="posts-header">
-        <div className="tab active">
-          <Link to={url}>
+        <div className={currentTab === "tab-posts" ? "active" : ""}>
+          <Link
+            to={url}
+            className="tab"
+            onClick={() => setCurrentTab("tab-posts")}
+          >
             <PostIcon />
             Posts
           </Link>
         </div>
-        <div className="tab active">
-          <Link to={`${url}/saved`}>
+        <div className={currentTab === "tab-saved" ? "active" : ""}>
+          <Link
+            to={`${url}/saved`}
+            className="tab"
+            onClick={() => setCurrentTab("tab-saved")}
+          >
             <SavedIcon />
             Saved
           </Link>
         </div>
-        <div className="tab active">
-          <Link to={`${url}/liked`}>
+        <div className={currentTab === "tab-liked" ? "active" : ""}>
+          <Link
+            to={`${url}/liked`}
+            className="tab"
+            onClick={() => setCurrentTab("tab-liked")}
+          >
             <HeartIcon />
             Liked
           </Link>
@@ -136,7 +149,6 @@ function UserProfile({ match }) {
           path={path}
           render={() => posts && <PhotoGrid items={posts} />}
         />
-        {/* Only available to logged in user */}
         <Route
           exact
           path={`${path}/saved`}
